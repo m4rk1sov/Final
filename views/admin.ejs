@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en" class="h-100">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NodeJs Project</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="/public/style.css">
+  </head>
+  <body>
+  <!-- <body class="d-flex h-100 text-center text-white bg-white"> -->
+      <!-- <div class="container d-flex w-100 h-100 p-3 mx-auto flex-column">
+        <header class="mb-auto">
+          <div>
+            <h3 class="float-md-start mb-0 text-dark">SE-2229</h3>
+            <nav class="nav nav-masthead justify-content-center float-md-end">
+            
+              <form action="/logout?_method=DELETE" method="POST">
+                <button class="nav-link fw-bold py-1 px-0 btn p=3 btn-dark text-white" type="submit"  >Logout</button>
+
+              </form>
+             
+            </nav>
+          </div>
+        </header> -->
+        <%- include('navbar') %>
+        <main class="px-3">
+      
+          <h1>Blog Posts</h1>
+          <% if (blogs && blogs.length > 0) { %>
+            <ul id="blog-list">
+                <% blogs.forEach(function(blog) { %>
+                    <li id="blog-<%= blog._id %>">
+                        <h2><%= blog.title %></h2>
+                        <!-- Bootstrap Carousel for Images -->
+                        <div id="carousel<%= blog._id %>" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <% blog.images.forEach(function(image, index) { %>
+                                <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                                    <img src="data:image/<%=image.contentType%>;base64,<%=image.data.toString('base64')%>" class="d-block w-100" alt="...">
+                                </div>
+                                <% }); %>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carousel<%= blog._id %>" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carousel<%= blog._id %>" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                        <p><%= blog.description %></p>
+                        <button onclick="deleteBlog('<%= blog._id %>')">Delete</button>
+                        <button onclick="location.href='/edit-blog/<%= blog._id %>'">Edit</button>
+                    </li>
+                    <% }); %>            
+            </ul>
+          <% } else { %>
+            <p>No blog posts found.</p>
+          <% } %>
+
+        </main>
+
+        <footer class="mt-auto text-dark-50">
+          
+          <p class="text-dark">Portfolio website</p>
+          <p class="text-dark">Almas Magzumov</p>
+        </footer>
+      </div>
+      <script src="/app.js"></script> 
+      <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+        
+    </body>
+</html>

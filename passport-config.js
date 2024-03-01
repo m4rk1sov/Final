@@ -1,17 +1,10 @@
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose")
-const User = require('./models/User.js') 
+const User = require("./models/User.js") 
+const mongodb = require("mongodb")
 
 
-// PostgreSQL client setup
-// const pool = new pg.Pool({
-//     user: 'postgres',
-//     host: 'localhost',
-//     database: 'ass1back',
-//     password: '231204almas',
-//     port: 5432,
-// });
 
 function initialize(passport) {
     const authenticateUser = async (email, password, done) => {
@@ -31,6 +24,17 @@ function initialize(passport) {
         }
     };
     passport.use(new LocalStrategy({ usernameField: 'email' }, authenticateUser));
+
+    // passport.serializeUser(function(user, done) {
+    //     done(null, user.id);
+    // });
+    
+    // passport.deserializeUser(function(id, done) {
+    //     User.findById(id, function(err, user) {
+    //         done(err, user);
+    //     });
+    // });
+    
 passport.serializeUser((user, done) => done(null, user.id));
 passport.deserializeUser((id, done) => {
     User.findById(id)
@@ -41,19 +45,3 @@ passport.deserializeUser((id, done) => {
 
 module.exports = initialize;
 
-const authenticateUser = async (email, password, done) => {
-    try {
-        const user = await User.findOne({ email: email });
-        if (user) {
-            if (await bcrypt.compare(password, user.password)) {
-                return done(null, user);
-            } else {
-                return done(null, false, { message: 'Password incorrect' });
-            }
-        } else {
-            return done(null, false, { message: 'No user with that email' });
-        }
-    } catch (e) {
-        return done(e);
-    }
-}    
